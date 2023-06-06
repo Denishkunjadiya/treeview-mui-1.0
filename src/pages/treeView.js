@@ -5,79 +5,17 @@ import * as muIcon from '@mui/icons-material';
 import * as mui from '@mui/material'
 import TreeItem from '@mui/lab/TreeItem';
 import { styled } from "@mui/material/styles";
+import Data from './data';
 
-
-const data = {
-    id: 1,
-    name: "jon",
-    child: [
-        {
-            id: 2,
-            name: "ron",
-            child: [
-                {
-                    id: 3,
-                    name: "dev",
-                    child: [
-                        {
-                            id: 4,
-                            name: "vinay",
-                            child: []
-                        }
-                    ]
-                }
-            ]
-        },
-        {
-            id: 5,
-            name: "marry",
-            child: [
-                {
-                    id: 6,
-                    name: "vasu",
-                    child: []
-
-                },
-                {
-                    id: 7,
-                    name: "vani",
-                    child: []
-                }
-            ]
-        },
-        {
-            id: 8,
-            name: "harry",
-            child: [
-                {
-                    id: 9,
-                    name: "karan",
-                    child: []
-                },
-                {
-                    id: 10,
-                    name: "aditya",
-                    child: [
-                        {
-                            id: 11,
-                            name: "varun"
-                        }
-                    ]
-                }
-            ]
-        }
-    ]
-}
-    ;
 
 const TreeViewReact = () => {
 
     const [expanded, setExpanded] = React.useState(false);
 
+    const [data, setData] = useState(Data)
+
     const [name, setName] = useState()
     const [parent, setParent] = useState()
-
-    console.log(parent)
 
     const renderTree = (nodes) => (
         <TreeItem key={nodes.id} nodeId={nodes.id} label={nodes.name}>
@@ -92,7 +30,7 @@ const TreeViewReact = () => {
     const optionTree = (nodes) => {
         const menuItems = [];
         menuItems.push(
-            <mui.MenuItem key={nodes.name} value={nodes.name}>
+            <mui.MenuItem key={nodes.id} value={nodes.name}>
                 {nodes.name}
             </mui.MenuItem>
         );
@@ -105,7 +43,50 @@ const TreeViewReact = () => {
     }
 
 
+    const save = () => {
+        if (parent) {
 
+            let genId = Math.random().toString(10).slice(2)
+            const info = { 'id': genId, "name": name, child: [] }
+
+            if (data.name === parent) {
+
+                data.child.push(info);
+                console.log("add")
+                setName('')
+
+            }
+
+            const child = (nodes) => (
+                nodes.child.map((member) => {
+                    if (member.name === parent) {
+                        member.child.push(info);
+                        console.log("child")
+                        setName('')
+                    } else if (member.child) {
+                        member.child.map((item) => child(item))
+                    }
+                })
+            );
+
+            child(data)
+
+            // data.child.map((member) => {
+            //     if (member.name === parent) {
+            //         member.child.push(info);
+            //         console.log("child")
+            //         setName('')
+            //     }
+            // })
+
+            // console.log("rer")
+            return info;
+
+        } else {
+            console.log('error')
+        }
+
+    }
 
     // <mui.MenuItem value={nodes.name} >
     //     {nodes.name}
@@ -119,6 +100,7 @@ const TreeViewReact = () => {
     //         {Array.isArray(nodes.child) ? nodes.child.map((node) => optionTree(node)) : null}
     //     </>
     // )
+
 
     const ExpandMore = styled((props) => {
         const { expand, ...other } = props;
@@ -184,7 +166,7 @@ const TreeViewReact = () => {
                     </mui.Typography>
 
                     <mui.Typography sx={{ margin: '10px 20px' }}>
-                        <mui.Button variant="contained">Add Data</mui.Button>
+                        <mui.Button variant="contained" onClick={save} >Add Data</mui.Button>
                     </mui.Typography>
 
                 </mui.CardContent>
