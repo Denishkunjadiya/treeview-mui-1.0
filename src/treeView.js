@@ -87,10 +87,12 @@ const TreeViewReact = () => {
     );
 
     const optionTree = (nodes) => (
-        <mui.MenuItem value={nodes.name} >
-            {nodes.name}
+        <>
+            <mui.MenuItem value={nodes.name} >
+                {nodes.name}
+            </mui.MenuItem>
             {Array.isArray(nodes.child) ? nodes.child.map((node) => optionTree(node)) : null}
-        </mui.MenuItem>
+        </>
     )
 
     const ExpandMore = styled((props) => {
@@ -160,15 +162,6 @@ const TreeViewReact = () => {
                         <mui.Button variant="contained">Add Data</mui.Button>
                     </mui.Typography>
 
-                    {/* <mui.Typography paragraph>Method:</mui.Typography>
-                    <mui.Typography paragraph>
-                        Add rice and stir very gently to distribute. Top with artichokes and
-                        peppers, and cook without stirring, until most of the liquid is
-                        absorbed, 15 to 18 minutes. Reduce heat to medium-low, add reserved
-                        shrimp and mussels, tucking them down into the rice, and cook again
-                        without stirring, until mussels have opened and rice is just tender,
-                        5 to 7 minutes more. (Discard any mussels that don&apos;t open.)
-                    </mui.Typography> */}
                 </mui.CardContent>
             </mui.Collapse>
         </>
