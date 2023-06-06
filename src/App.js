@@ -1,5 +1,5 @@
 import './App.css';
-import TreeViewReact from './treeView';
+import TreeViewReact from './pages/treeView';
 
 
 function App() {

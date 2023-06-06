@@ -67,7 +67,8 @@ const data = {
             ]
         }
     ]
-};
+}
+    ;
 
 const TreeViewReact = () => {
 
@@ -86,14 +87,38 @@ const TreeViewReact = () => {
         </TreeItem>
     );
 
-    const optionTree = (nodes) => (
-        <>
-            <mui.MenuItem value={nodes.name} >
+
+
+    const optionTree = (nodes) => {
+        const menuItems = [];
+        menuItems.push(
+            <mui.MenuItem key={nodes.name} value={nodes.name}>
                 {nodes.name}
             </mui.MenuItem>
-            {Array.isArray(nodes.child) ? nodes.child.map((node) => optionTree(node)) : null}
-        </>
-    )
+        );
+        if (nodes.child) {
+            nodes.child.forEach((node) => {
+                menuItems.push(...optionTree(node));
+            });
+        }
+        return menuItems;
+    }
+
+
+
+
+    // <mui.MenuItem value={nodes.name} >
+    //     {nodes.name}
+    // </mui.MenuItem>
+
+    // const optionTree = (nodes) => (
+    //     <>
+    //         <mui.MenuItem value={nodes.name} >
+    //             {nodes.name}
+    //         </mui.MenuItem>
+    //         {Array.isArray(nodes.child) ? nodes.child.map((node) => optionTree(node)) : null}
+    //     </>
+    // )
 
     const ExpandMore = styled((props) => {
         const { expand, ...other } = props;
