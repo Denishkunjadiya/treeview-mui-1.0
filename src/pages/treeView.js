@@ -60,19 +60,21 @@ const TreeViewReact = () => {
     // ---------------------- remove
 
     const remove = () => {
-        const removeRec = (removeData) => {
+        const deleteData = (id, removeData) => {
             if (removeData.id === id) {
-
-                // const { name, id, child, ...newRecord } = removeData
-                // console.log(removeData)
-                // console.log(newRecord)
-                setOpen(old => [...old,name,id,])
-
-            } else {
-                removeData.child.map(item => removeRec(item))
+                return null;
             }
-        }
-        removeRec(data)
+
+            if (removeData.child && removeData.child.length > 0) {
+                removeData.child = removeData.child.filter((child) => deleteData(id, child));
+            }
+
+            return removeData;
+        };
+        const updatedData = deleteData(id, { ...data });
+        setData(updatedData);
+
+        setOpen(false)
     }
 
     // --------------------- treeView
