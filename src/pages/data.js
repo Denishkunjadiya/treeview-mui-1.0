@@ -33,7 +33,7 @@ export const data = {
                             child: [
                                 {
                                     id: 12,
-                                    name: "vinaaaaaa    y",
+                                    name: "vinaaaaaay",
                                     child: []
                                 }
                             ]

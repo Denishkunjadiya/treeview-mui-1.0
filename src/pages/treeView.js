@@ -3,29 +3,74 @@ import React, { useState } from 'react'
 import TreeView from '@mui/lab/TreeView';
 import * as muIcon from '@mui/icons-material';
 import * as mui from '@mui/material'
+import * as yup from 'yup';
+
 import TreeItem from '@mui/lab/TreeItem';
 import { styled } from "@mui/material/styles";
 import Data from './data';
+import EditModel from './EditModel';
+
 
 
 const TreeViewReact = () => {
 
-    const [expanded, setExpanded] = React.useState(false);
+    const [expanded, setExpanded] = useState(false);
 
     const [data, setData] = useState(Data)
+    const [open, setOpen] = useState(false);
 
     const [name, setName] = useState()
     const [parent, setParent] = useState()
+    const [chake, setChecked] = useState()
+    const [id, setId] = useState()
+
+    const [editName, setEditName] = useState('');
+
+    const [errors, setErrors] = useState()
+
+    const valid = yup.object().shape({
+        name: yup.string().required('Name is Required')
+    })
+
+
+    const edit = (editData) => {
+
+        const edData = (ed) => {
+            if (ed.id === id) {
+                ed.name = editData
+                setOpen(false)
+
+            } else {
+                ed?.child.map((item) => edData(item))
+            }
+        }
+        edData(data)
+    }
+
+
+    const editdata = (id) => {
+        setChecked(!chake)
+        setOpen(true);
+        setEditName(id.name)
+        setId(id.id)
+    }
 
     const renderTree = (nodes) => (
-        <TreeItem key={nodes.id} nodeId={nodes.id} label={nodes.name}>
+        <TreeItem
+            key={nodes.id}
+            nodeId={nodes.id}
+            label={<mui.FormControlLabel control={<mui.Checkbox
+                onClick={() => editdata(nodes)}
+                inputProps={{ "aria-label": "controlled" }}
+                onChange={(e) => setChecked(e.target.checked)}
+                checked={chake}
+            />} label={nodes.name} />}
+        >
             {Array.isArray(nodes.child)
                 ? nodes.child.map((node) => renderTree(node))
                 : null}
         </TreeItem>
     );
-
-
 
     const optionTree = (nodes) => {
         const menuItems = [];
@@ -48,59 +93,31 @@ const TreeViewReact = () => {
 
             let genId = Math.random().toString(10).slice(2)
             const info = { 'id': genId, "name": name, child: [] }
-
-            if (data.name === parent) {
-
-                data.child.push(info);
-                console.log("add")
-                setName('')
-
-            }
-
-            const child = (nodes) => (
-                nodes.child.map((member) => {
-                    if (member.name === parent) {
-                        member.child.push(info);
-                        console.log("child")
-                        setName('')
-                    } else if (member.child) {
-                        member.child.map((item) => child(item))
+            valid.validate({ name })
+                .then(() => {
+                    const add = (aa) => {
+                        if (aa.name === parent) {
+                            aa.child.push(info);
+                            setName('')
+                            console.log("Add")
+                        } else {
+                            aa.child.map((item) => add(item))
+                        }
                     }
+                    add(data)
+                }).catch((err) => {
+                    const validError = {};
+                    err.inner.forEach((error) => {
+                        validError[error.path] = error.message;
+                    })
+                    setErrors(validError)
                 })
-            );
-
-            child(data)
-
-            // data.child.map((member) => {
-            //     if (member.name === parent) {
-            //         member.child.push(info);
-            //         console.log("child")
-            //         setName('')
-            //     }
-            // })
-
-            // console.log("rer")
-            return info;
 
         } else {
-            console.log('error')
+            console.log('Parent Not Found')
         }
 
     }
-
-    // <mui.MenuItem value={nodes.name} >
-    //     {nodes.name}
-    // </mui.MenuItem>
-
-    // const optionTree = (nodes) => (
-    //     <>
-    //         <mui.MenuItem value={nodes.name} >
-    //             {nodes.name}
-    //         </mui.MenuItem>
-    //         {Array.isArray(nodes.child) ? nodes.child.map((node) => optionTree(node)) : null}
-    //     </>
-    // )
-
 
     const ExpandMore = styled((props) => {
         const { expand, ...other } = props;
@@ -143,8 +160,9 @@ const TreeViewReact = () => {
 
             <mui.Collapse in={expanded} timeout="auto" unmountOnExit>
                 <mui.CardContent>
+
                     <mui.Typography sx={{ margin: 'auto 30px' }}>
-                        <mui.TextField required defaultValue="" value={name} onChange={(e) => setName(e.target.value)} id="standard-basic" label="Name" variant="standard" />
+                        <mui.TextField required name='name' defaultValue="" value={name} onChange={(e) => setName(e.target.value)} id="standard-basic" label="Name" variant="standard" />
                     </mui.Typography>
 
                     <mui.Typography sx={{ margin: '10px 20px' }}>
@@ -159,7 +177,6 @@ const TreeViewReact = () => {
                                 label="parent"
                             >
                                 {optionTree(data)}
-                                {/* <mui.MenuItem value={20}>Twenty</mui.MenuItem> */}
                             </mui.Select>
 
                         </mui.FormControl>
@@ -171,18 +188,10 @@ const TreeViewReact = () => {
 
                 </mui.CardContent>
             </mui.Collapse>
+            <EditModel setOpen={setOpen} editdata={edit} setChecked={setChecked} open={open} editName={editName} setEditName={setEditName} />
         </>
     )
 }
 
 export default TreeViewReact
 
-
-//  <select
-//      labelId="demo-simple-select-standard-label"
-//      id="demo-simple-select-standard"
-//      value={parent}
-//      onChange={(e) => setParent(e.target.value)}
-//      label="parent">
-//          {optionTree(data)}
-//  </select>
