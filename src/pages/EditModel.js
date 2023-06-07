@@ -24,6 +24,10 @@ const EditModel = (props) => {
         props.editdata(edName)
     }
 
+    const removeData = () => {
+        props.remove()
+    }
+
     const close = () => {
         props.setChecked('')
         props.setOpen(false)
@@ -48,7 +52,7 @@ const EditModel = (props) => {
                     <mui.TextField required defaultValue="" value={edName} id="standard-basic" style={{ width: '100%' }} label="Name" variant="standard" onChange={(e) => setEdName(e.target.value)} />
                     <mui.Stack direction="row" sx={{ mt: 4 }} spacing={2}>
                         <mui.Button variant="contained" type='button' onClick={editdata}>Edit</mui.Button>
-                        <mui.Button variant="contained" type='button' style={{ background: '#d80000' }} >remove</mui.Button>
+                        <mui.Button variant="contained" type='button' onClick={removeData} style={{ background: '#d80000' }} >remove</mui.Button>
                     </mui.Stack>
                 </mui.Box>
             </mui.Modal>

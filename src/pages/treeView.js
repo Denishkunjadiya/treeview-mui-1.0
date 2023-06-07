@@ -33,6 +33,8 @@ const TreeViewReact = () => {
     })
 
 
+    // --------------- edit Data
+
     const edit = (editData) => {
 
         const edData = (ed) => {
@@ -55,6 +57,26 @@ const TreeViewReact = () => {
         setId(id.id)
     }
 
+    // ---------------------- remove
+
+    const remove = () => {
+        const removeRec = (removeData) => {
+            if (removeData.id === id) {
+
+                // const { name, id, child, ...newRecord } = removeData
+                // console.log(removeData)
+                // console.log(newRecord)
+                setOpen(old => [...old,name,id,])
+
+            } else {
+                removeData.child.map(item => removeRec(item))
+            }
+        }
+        removeRec(data)
+    }
+
+    // --------------------- treeView
+
     const renderTree = (nodes) => (
         <TreeItem
             key={nodes.id}
@@ -72,6 +94,8 @@ const TreeViewReact = () => {
         </TreeItem>
     );
 
+    // ========== option
+
     const optionTree = (nodes) => {
         const menuItems = [];
         menuItems.push(
@@ -87,6 +111,7 @@ const TreeViewReact = () => {
         return menuItems;
     }
 
+    // ------------------ Add Data
 
     const save = () => {
         if (parent) {
@@ -119,6 +144,8 @@ const TreeViewReact = () => {
 
     }
 
+    // -------------------- mui style
+
     const ExpandMore = styled((props) => {
         const { expand, ...other } = props;
         return <mui.IconButton {...other} />;
@@ -132,9 +159,11 @@ const TreeViewReact = () => {
         })
     }));
 
+    // ------------------- add btn expende
     const handleExpandClick = () => {
         setExpanded(!expanded);
     };
+
     return (
 
         <>
@@ -188,7 +217,7 @@ const TreeViewReact = () => {
 
                 </mui.CardContent>
             </mui.Collapse>
-            <EditModel setOpen={setOpen} editdata={edit} setChecked={setChecked} open={open} editName={editName} setEditName={setEditName} />
+            <EditModel setOpen={setOpen} remove={remove} editdata={edit} setChecked={setChecked} open={open} editName={editName} setEditName={setEditName} />
         </>
     )
 }
