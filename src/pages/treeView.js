@@ -137,13 +137,7 @@ const TreeViewReact = () => {
             const add = (aa) => {
                 if (aa.name === values.parent) {
                     aa.child.push(info);
-                    values.name = ''
-                    values.parent = ''
-                    // touched.name = {}
-                    // touched.parent = {}
                     console.log("Add")
-
-                    // return values
                 } else {
                     aa.child.map((item) => add(item))
                 }
