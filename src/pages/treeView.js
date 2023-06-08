@@ -12,6 +12,8 @@ import { useFormik } from 'formik';
 
 import { connect } from 'react-redux';
 import { fetchData } from '../action/dataAction';
+import { ToastContainer, Zoom, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 
 const schema = yup.object({
@@ -57,7 +59,8 @@ const TreeViewReact = ({ da, fetchData }) => {
             if (ed.id === id) {
                 ed.name = editData
                 setOpen(false)
-
+                toast.success("record edit successfully")
+                setChecked('')
             } else {
                 ed?.child.map((item) => edData(item))
             }
@@ -78,6 +81,8 @@ const TreeViewReact = ({ da, fetchData }) => {
     const remove = () => {
         const deleteData = (id, removeData) => {
             if (removeData.id === id) {
+                toast.success('record delete successfully')
+                setChecked('')
                 return null;
             }
 
@@ -139,7 +144,7 @@ const TreeViewReact = ({ da, fetchData }) => {
             const add = (aa) => {
                 if (aa.name === values.parent) {
                     aa.child.push(info);
-                    console.log("Add")
+                    toast.success("record add")
                 } else {
                     aa.child.map((item) => add(item))
                 }
@@ -147,7 +152,7 @@ const TreeViewReact = ({ da, fetchData }) => {
             add(data)
 
         } else {
-            console.log('Parent Not Found')
+            toast.error("Parent Not Found")
         }
 
     }
@@ -181,6 +186,7 @@ const TreeViewReact = ({ da, fetchData }) => {
     return (
 
         <>
+            <ToastContainer />
             <TreeView
                 aria-label="rich object"
                 defaultCollapseIcon={<muIcon.ExpandMore />}
