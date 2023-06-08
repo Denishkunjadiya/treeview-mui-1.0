@@ -1,6 +1,7 @@
 import * as mui from '@mui/material'
 import React, { useEffect, useState } from 'react'
 import CloseIcon from '@mui/icons-material/Close';
+import Remove from './remove';
 
 const style = {
     position: 'absolute',
@@ -19,11 +20,19 @@ const style = {
 const EditModel = (props) => {
 
     const [edName, setEdName] = useState()
+    const [open, setOpen] = useState(false);
 
+    // -------- edit
     const editdata = () => {
         props.editdata(edName)
     }
 
+    // ------------ model 
+    const model = () => {
+        setOpen(true)
+    }
+
+    // -------------- remove 
     const removeData = () => {
         props.remove()
     }
@@ -52,11 +61,12 @@ const EditModel = (props) => {
                     <mui.TextField required defaultValue="" value={edName} id="standard-basic" style={{ width: '100%' }} label="Name" variant="standard" onChange={(e) => setEdName(e.target.value)} />
                     <mui.Stack direction="row" sx={{ mt: 4 }} spacing={2}>
                         <mui.Button variant="contained" type='button' onClick={editdata}>Edit</mui.Button>
-                        {props.editName === 'jon' ? '' : <mui.Button variant="contained" type='button' onClick={removeData} style={{ background: '#d80000' }} >remove</mui.Button>}
+                        {/* {props.editName === 'jon' ? '' : <mui.Button variant="contained" type='button' onClick={removeData} style={{ background: '#d80000' }} >remove</mui.Button>} */}
+                        {props.editName === 'jon' ? '' : <mui.Button variant="contained" type='button' onClick={model} style={{ background: '#d80000' }} >remove</mui.Button>}
                     </mui.Stack>
                 </mui.Box>
             </mui.Modal>
-
+            <Remove setOpen={setOpen} remove={removeData} open={open} />
         </div>
     )
 }

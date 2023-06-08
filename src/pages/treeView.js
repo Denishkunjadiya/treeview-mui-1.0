@@ -12,8 +12,8 @@ import EditModel from './EditModel';
 import { useFormik } from 'formik';
 
 const schema = yup.object({
-    name: yup.string().min(2).required('name is required'),
-    parent: yup.string().required('select box is empty')
+    name: yup.string().min(2).required('**name is required'),
+    parent: yup.string().required('**select box is empty')
 })
 
 
@@ -81,7 +81,6 @@ const TreeViewReact = () => {
             if (removeData.child && removeData.child.length > 0) {
                 removeData.child = removeData.child.filter((child) => deleteData(id, child));
             }
-
             return removeData;
         };
         const updatedData = deleteData(id, { ...data });
@@ -182,7 +181,7 @@ const TreeViewReact = () => {
                 defaultCollapseIcon={<muIcon.ExpandMore />}
                 defaultExpanded={['root']}
                 defaultExpandIcon={<muIcon.ChevronRight />}
-                sx={{ height: 'auto', flexGrow: 1, maxWidth: 'auto' }}
+                sx={{ height: 'auto', flexGrow: 1, maxWidth: '98%' }}
             >
                 {renderTree(data)}
             </TreeView>
@@ -202,10 +201,9 @@ const TreeViewReact = () => {
 
                     <form onSubmit={handleSubmit}>
                         <mui.Typography sx={{ margin: 'auto 30px' }}>
-                            {/* <mui.TextField required name='name' defaultValue="" value={name} onChange={(e) => setName(e.target.value)} id="standard-basic" label="Name" variant="standard" /> */}
-                            <mui.TextField name='name' defaultValue="" value={values.name} onChange={handleChange} onBlur={handleBlur} id="standard-basic" label="Name" variant="standard" />
-                            {/* {console.log(erro)} */}
-                            {touched.name && errors.name && <p style={{ color: 'red' }}>**{errors.name}</p>}
+                            <mui.TextField name='name' defaultValue="" error={touched.name && errors.name && errors.name} value={values.name} onChange={handleChange} onBlur={handleBlur} id="standard-basic" label="Name" variant="standard" />
+                            <mui.FormHelperText style={{ color: 'red' }}>{errors.name && touched.name ? errors.name : null}</mui.FormHelperText>
+
                         </mui.Typography>
 
                         <mui.Typography sx={{ margin: '10px 20px' }}>
@@ -222,7 +220,7 @@ const TreeViewReact = () => {
                                 >
                                     {optionTree(data)}
                                 </mui.Select>
-                                {touched.parent && errors.parent && <p style={{ color: 'red' }}>**{errors.parent}</p>}
+                                <mui.FormHelperText style={{ color: 'red' }}>{errors.parent && touched.parent ? errors.parent : null}</mui.FormHelperText>
                             </mui.FormControl>
 
                         </mui.Typography>
