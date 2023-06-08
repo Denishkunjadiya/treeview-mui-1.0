@@ -7,9 +7,12 @@ import * as yup from 'yup';
 
 import TreeItem from '@mui/lab/TreeItem';
 import { styled } from "@mui/material/styles";
-import Data from './data';
 import EditModel from './EditModel';
 import { useFormik } from 'formik';
+
+import { connect } from 'react-redux';
+import { fetchData } from '../action/dataAction';
+
 
 const schema = yup.object({
     name: yup.string().min(2).required('**name is required'),
@@ -17,11 +20,11 @@ const schema = yup.object({
 })
 
 
-const TreeViewReact = () => {
+const TreeViewReact = ({ da, fetchData }) => {
 
     const [expanded, setExpanded] = useState(false);
 
-    const [data, setData] = useState(Data)
+    const [data, setData] = useState(da)
     const [open, setOpen] = useState(false);
 
     const [chake, setChecked] = useState()
@@ -170,8 +173,10 @@ const TreeViewReact = () => {
     };
 
     useEffect(() => {
+        fetchData()
         renderTree(data)
-    }, [handleChange])
+        setData(da)
+    }, [handleChange, da, fetchData])
 
     return (
 
@@ -238,5 +243,10 @@ const TreeViewReact = () => {
     )
 }
 
-export default TreeViewReact
+// ----------redux connect and set data to da
+const mapState = (state) => ({
+    da: state
+})
+
+export default connect(mapState, { fetchData })(TreeViewReact)
 

@@ -1,4 +1,5 @@
 import './App.css';
+import Test from './pages/Test';
 import TreeViewReact from './pages/treeView';
 import dataReducer from './reducer/dataReducer'
 import { Provider } from 'react-redux';
@@ -10,6 +11,7 @@ function App() {
   return (
     <Provider store={store}>
       <TreeViewReact />
+      {/* <Test /> */}
     </Provider>
   );
 }
